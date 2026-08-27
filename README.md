@@ -2,7 +2,7 @@
 
 This workflow supports the backup Picarro analyser at the [Izaña Atmospheric Research Center](https://izana.aemet.es/), internally known as the “Picarro aux” or “Picarro backup”. The analyser is a third instrument, operating independently of the Picarro systems used for GAW and ICOS, and is employed solely as a comparison instrument. Its processing workflow is therefore simpler than those used for the other two analysers.
 
-The workflow is designed for the ambient/target sampling sequence of the Picarro aux. It uses only two target tanks, each sampled for 30 minutes once per day, and their measurements are used to derive a daily calibration curve. Although they therefore function as calibration tanks, we refer to them as targets because they are sampled according to the same schedule used for target tanks on our other instruments.
+The workflow is designed for the ambient/target sampling sequence of the Picarro aux. It uses only two target tanks, each sampled for 30 minutes once per day, and their measurements are used to derive a daily calibration curve. Although they therefore function as calibration tanks, we refer to them as targets because they are sampled according to a schedule very similar to that used for target tanks on other instruments at Izaña.
 
 Comparison with the more elaborate workflow used for the Picarro instrument operated for GAW at Izaña shows that the mean and median differences in CO2, CH4, and CO concentrations are on the order of 0.001–0.01 ppm for CO2 and 0.001–0.01 ppb for CH4 and CO. This is therefore a simple, useful, and functional solution that fully meets our needs.
 
