@@ -9,10 +9,14 @@ work, subject to the following conditions:
 1. The code, or any modified version of it, may not be used for commercial
    purposes.
 
-2. The copyright notice and this license notice must be included in all copies
+2. Any publication, report, thesis, presentation, or other scientific work
+   that uses this code, or a modified version of it, must acknowledge this
+   repository and cite its URL.
+
+3. The copyright notice and this license notice must be included in all copies
    or substantial portions of the code.
 
-3. The input observational data are not distributed under this license. They
+4. The input observational data are not distributed under this license. They
    remain subject to the terms of their original data providers.
 
 Commercial use, commercial redistribution, sublicensing for commercial use,

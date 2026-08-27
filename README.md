@@ -6,6 +6,8 @@ The workflow is designed for the ambient/target sampling sequence of the Picarro
 
 Comparison with the more elaborate workflow used for the Picarro instrument operated for GAW at Izaña shows that the mean and median differences in CO2, CH4, and CO concentrations are on the order of 0.001–0.01 ppm for CO2 and 0.001–0.01 ppb for CH4 and CO. This is therefore a simple, useful, and functional solution that fully meets our needs.
 
+This workflow is shared to support the scientific community and may be useful as a reference or starting point for similar Picarro data-processing applications.
+
 The explanations, comments, documentation, variable names and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
 
 ## License
