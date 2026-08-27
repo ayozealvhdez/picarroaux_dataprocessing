@@ -1,7 +1,12 @@
-The processing workflow implemented here is simpler than those used for the other two Izaña Picarro instruments, which are operated for GAW and ICOS. This instrument, known as the “Picarro aux” or “Picarro backup”, is used solely as a comparison reference. Accordingly, it uses only two target tanks, each sampled for 30 minutes once per day; these measurements are used to derive a daily calibration curve.
+# Python workflow for processing data from the backup Picarro analyser at Izaña Observatory
 
-Comparison with the more elaborate workflow used for the Picarro instrument operated for GAW at Izaña shows that the mean and median differences in CO2, CH4, and CO concentrations are on the order of 0.01–0.001 ppm for CO2 and ppb for CH4 and CO. This is therefore a simple but useful and functional solution that fully meets our needs.
-The explanations, comments, and variable names are in Spanish because this script is primarily intended for internal use by the team at the [Izaña Atmospheric Research Center](https://izana.aemet.es/).
+This analyser is a third instrument, operating independently of the Picarro systems used for GAW and ICOS. The processing workflow implemented here is simpler than those used for the other two Picarro instruments operated by the [Izaña Atmospheric Research Center](https://izana.aemet.es/). This instrument, internally known as the “Picarro aux” or “Picarro backup”, is used solely as a comparison instrument.
+
+The workflow is designed for the ambient/target sampling sequence of the Picarro aux. It uses only two target tanks, each sampled for 30 minutes once per day; these measurements are used to derive a daily calibration curve.
+
+Comparison with the more elaborate workflow used for the Picarro instrument operated for GAW at Izaña shows that the mean and median differences in CO2, CH4, and CO concentrations are on the order of 0.001–0.01 ppm for CO2 and 0.001–0.01 ppb for CH4 and CO. This is therefore a simple, useful, and functional solution that fully meets our needs.
+
+The explanations, comments, and variable names are in Spanish because this script is primarily intended for internal use by the Izaña team.
 
 ## PASO 1. COPIA DE DATOS RAW
 
