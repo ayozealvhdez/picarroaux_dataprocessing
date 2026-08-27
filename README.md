@@ -10,6 +10,11 @@ The code is public to support the scientific community, since it may be useful a
 
 The comments, variable names, and file names are in Spanish because this script was primarily conceived for internal use by the Izaña team.
 
+## Requirements
+
+- Python 3.11–3.14 (Python 3.14 recommended)
+- Dependencies listed in [`requirements.txt`](requirements.txt)
+
 ## License
 
 This project is released under an [Academic Non-Commercial License](LICENSE). The repository may be used, copied, and modified for non-commercial academic research, teaching, and scientific work. Commercial use requires prior written permission from the copyright holder. Input observational data are not distributed under this license.
