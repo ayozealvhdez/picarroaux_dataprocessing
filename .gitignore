@@ -1,16 +1,16 @@
-# Entornos y cachés de Python
+# Python virtual environments and bytecode caches
 .venv/
 __pycache__/
 *.py[cod]
 
-# Datos temporales y resultados generados
+# Generated temporary and processed data
 tmp/
 processed_data/
 
-# Prueba de comparación local
+# Local comparison scripts and data
 comparison_with_pedro.png
 comparison_with_pedro.py
 datos_pedro/
 
-# Configuración local del IDE
+# Local IDE configuration
 .idea/
