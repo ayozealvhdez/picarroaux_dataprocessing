@@ -12,7 +12,7 @@ The comments, variable names, and file names are in Spanish because this script 
 
 ## License
 
-This project is released under the [Academic Non-Commercial License](LICENSE). It may be used, copied, and modified for non-commercial academic research, teaching, and scientific work. Commercial use requires prior written permission from the copyright holder. Input observational data are not distributed under this license.
+This project is released under an [Academic Non-Commercial License](LICENSE). The repository may be used, copied, and modified for non-commercial academic research, teaching, and scientific work. Commercial use requires prior written permission from the copyright holder. Input observational data are not distributed under this license.
 
 > **Note:** This workflow includes installation-specific configuration, such as data paths, instrument settings, target reference values, and processing parameters. Adapt these settings to your local setup before use.
 
