@@ -8,7 +8,7 @@ Comparison with the more elaborate workflow used for the Picarro instrument oper
 
 The code is public to support the scientific community, since it may be useful as a reference or starting point for similar Picarro data-processing applications.
 
-The comments, variable names, and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
+The comments, variable names, and file names are in Spanish because this script was primarily conceived for internal use by the Izaña team.
 
 ## License
 
