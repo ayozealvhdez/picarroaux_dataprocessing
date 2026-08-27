@@ -16,12 +16,16 @@ This project is released under the [Academic Non-Commercial License](LICENSE). I
 
 > **Note:** This workflow includes installation-specific configuration, such as data paths, instrument settings, target reference values, and processing parameters. Adapt these settings to your local setup before use.
 
-## PASO 1. COPIA DE DATOS RAW
+## Flujo de procesado
+
+El flujo se ejecuta de forma incremental y está organizado en las siguientes etapas. Los resultados ya existentes no se recalculan ni se sobrescriben.
+
+### Paso 1. Copia de datos raw
 
 - Copia diaria de los datos raw desde la QNAP (`Z:\picarro-aux\DataLog_User`) hacia `tmp/raw_data`. Los días ya existentes en `tmp/raw_data` no se sobrescriben.
 - Se copian los últimos 80 días completos hasta ayer (parámetro configurable al inicio de `main.py`). Son esos días los que se van a procesar (sin sobrescribir los que ya estén procesados), y los datos raw más antiguos se van borrando (ver paso 6 para más detalles).
 
-## PASO 2. PREPROCESADO DE AMBIENTE Y TARGETS
+### Paso 2. Preprocesado de ambiente y targets
 
 - Lectura cronológica de los datos raw (archivos `.dat` en `tmp/raw_data`) de cada día.
 - Para cada día, extracción de las columnas `CO2`, `CH4`, `CO`, `EPOCH_TIME`, `MPVPosition` y, si existe, `ALARM_STATUS`.
@@ -29,14 +33,14 @@ This project is released under the [Academic Non-Commercial License](LICENSE). I
 - Descarte de los primeros 10 min después de cada cambio a ambiente (parámetro configurable al inicio de `main.py`). También se convierten CH4 y CO de ppm a ppb.
 - Generación de los flags `processing_flag_co2`, `processing_flag_ch4` y `processing_flag_co`: 1 si el valor es numérico y no hay alarma; 0 en caso contrario.
 
-## PASO 3. PROCESADO DE TARGETS COMO INYECCIONES
+### Paso 3. Procesado de targets como inyecciones
 
 - Cálculo de la media y la desviación estándar poblacional (`dof=0`) de cada gas dentro de cada inyección.
 - Se considera una misma inyección cuando el salto entre medidas consecutivas con la misma `MPVPosition` no supera los 100 s (parámetro configurable al inicio de `main.py`).
 - Descarte de los primeros 10 min de cada inyección (parámetro configurable al inicio de `main.py`). Solo se usan observaciones con `processing_flag_*=1` y se requieren al menos 100 por gas; si no, la media y la desviación quedan vacías.
 - Agrupación de los resultados de CO2, CH4 y CO en una fila por inyección. El resultado se guarda en `processed_data/injections`.
 
-## PASO 4. CÁLCULO DE CALIBRACIONES
+### Paso 4. Cálculo de calibraciones
 
 - Lectura del histórico completo de inyecciones target ya procesadas (`processed_data/injections`).
 - Emparejamiento de las inyecciones consecutivas con `MPVPosition=2` y `MPVPosition=3`.
@@ -45,7 +49,7 @@ This project is released under the [Academic Non-Commercial License](LICENSE). I
 - En `processed_data/calibrations` se guardan ficheros con los parámetros de la calibración y otros parámetros útiles, como la fecha a partir de la cual la calibración es válida (= el final de la segunda inyección de target correspondiente).
 - En `processed_data/calibration_curves` se guarda una gráfica PNG con los dos puntos de cada gas y el ajuste lineal.
 
-## PASO 5. CALIBRACIÓN DEL AMBIENTE
+### Paso 5. Calibración del ambiente
 
 - Lectura de todo el histórico de calibraciones lineales disponible.
 - Selección, para cada medida y gas, de la calibración más reciente cuya fecha sea anterior o igual a la medida.
@@ -53,9 +57,9 @@ This project is released under the [Academic Non-Commercial License](LICENSE). I
 - No se interpola entre la calibración anterior y la posterior ni se limita la antigüedad máxima de la calibración (es un procesado sencillo... y tenemos calibraciones diarias).
 - Guardado de los datos procesados en `processed_data/ambient`, incluyendo el valor antes de corregir, el valor corregido y la fecha de la calibración empleada.
 
-## PASO 6. LIMPIEZA DE DATOS TEMPORALES
+### Paso 6. Limpieza de datos temporales
 
 - Si todas las etapas de procesado terminan correctamente, se eliminan los datos raw y preprocesados situados fuera del periodo configurado (por defecto: 80 días).
 - Así se evita acumular demasiados ficheros temporales que llenen el disco duro. Solo se conservan indefinidamente los datos que hay en `processed_data` (promedios de inyecciones, datos de ambiente procesados, calibraciones).
 
-NOTA: Los resultados ya existentes no se recalculan ni se sobrescriben. Si quiere que se recalculen los datos procesados de un día, primero hay que borrar el subdirectorio correspondiente y luego correr el código.
+> **Nota:** Si se desea recalcular los datos procesados de un día, primero hay que borrar el subdirectorio correspondiente y volver a ejecutar el código.
