@@ -1,0 +1,16 @@
+# Entornos y cachés de Python
+.venv/
+__pycache__/
+*.py[cod]
+
+# Datos temporales y resultados generados
+tmp/
+processed_data/
+
+# Prueba de comparación local
+comparison_with_pedro.png
+comparison_with_pedro.py
+datos_pedro/
+
+# Configuración local del IDE
+.idea/
