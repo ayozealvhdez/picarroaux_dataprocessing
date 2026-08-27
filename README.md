@@ -8,7 +8,7 @@ Comparison with the more elaborate workflow used for the Picarro instrument oper
 
 This workflow is shared to support the scientific community and may be useful as a reference or starting point for similar Picarro data-processing applications.
 
-The explanations, comments, documentation, variable names and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
+The comments, variable names and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
 
 ## License
 
@@ -16,50 +16,50 @@ This project is released under the [Academic Non-Commercial License](LICENSE). I
 
 > **Note:** This workflow includes installation-specific configuration, such as data paths, instrument settings, target reference values, and processing parameters. Adapt these settings to your local setup before use.
 
-## Flujo de procesado
+## Processing workflow
 
-El flujo se ejecuta de forma incremental y está organizado en las siguientes etapas. Los resultados ya existentes no se recalculan ni se sobrescriben.
+The workflow runs incrementally and is organized into the following stages. Existing results are neither recalculated nor overwritten.
 
-### Paso 1. Copia de datos raw
+### Step 1. Raw data copy
 
-- Copia diaria de los datos raw desde la QNAP (`Z:\picarro-aux\DataLog_User`) hacia `tmp/raw_data`. Los días ya existentes en `tmp/raw_data` no se sobrescriben.
-- Se copian los últimos 80 días completos hasta ayer (parámetro configurable al inicio de `main.py`). Son esos días los que se van a procesar (sin sobrescribir los que ya estén procesados), y los datos raw más antiguos se van borrando (ver paso 6 para más detalles).
+- Daily copy of the raw data from the QNAP (`Z:\picarro-aux\DataLog_User`) to `tmp/raw_data`. Days already present in `tmp/raw_data` are not overwritten.
+- The latest 80 complete days up to yesterday are copied (parameter configurable at the beginning of `main.py`). These are the days that will be processed (without overwriting those already processed), while older raw data are progressively deleted (see Step 6 for more details).
 
-### Paso 2. Preprocesado de ambiente y targets
+### Step 2. Preprocessing of ambient and target data
 
-- Lectura cronológica de los datos raw (archivos `.dat` en `tmp/raw_data`) de cada día.
-- Para cada día, extracción de las columnas `CO2`, `CH4`, `CO`, `EPOCH_TIME`, `MPVPosition` y, si existe, `ALARM_STATUS`.
-- División de los datos según `MPVPosition` y almacenamiento en ficheros separados para ambiente y targets dentro de `tmp/preprocessed_data`.
-- Descarte de los primeros 10 min después de cada cambio a ambiente (parámetro configurable al inicio de `main.py`). También se convierten CH4 y CO de ppm a ppb.
-- Generación de los flags `processing_flag_co2`, `processing_flag_ch4` y `processing_flag_co`: 1 si el valor es numérico y no hay alarma; 0 en caso contrario.
+- Chronological reading of the raw data (the `.dat` files in `tmp/raw_data`) for each day.
+- For each day, extraction of the `CO2`, `CH4`, `CO`, `EPOCH_TIME`, `MPVPosition` and, if present, `ALARM_STATUS` columns.
+- Data are split according to `MPVPosition` and stored in separate files for ambient and target data within `tmp/preprocessed_data`.
+- The first 10 min after each switch to ambient air are discarded (parameter configurable at the beginning of `main.py`). CH4 and CO are also converted from ppm to ppb.
+- Generation of the `processing_flag_co2`, `processing_flag_ch4`, and `processing_flag_co` flags: 1 if the value is numeric and there is no alarm; 0 otherwise.
 
-### Paso 3. Procesado de targets como inyecciones
+### Step 3. Processing targets as injections
 
-- Cálculo de la media y la desviación estándar poblacional (`dof=0`) de cada gas dentro de cada inyección.
-- Se considera una misma inyección cuando el salto entre medidas consecutivas con la misma `MPVPosition` no supera los 100 s (parámetro configurable al inicio de `main.py`).
-- Descarte de los primeros 10 min de cada inyección (parámetro configurable al inicio de `main.py`). Solo se usan observaciones con `processing_flag_*=1` y se requieren al menos 100 por gas; si no, la media y la desviación quedan vacías.
-- Agrupación de los resultados de CO2, CH4 y CO en una fila por inyección. El resultado se guarda en `processed_data/injections`.
+- Calculation of the mean and population standard deviation (`dof=0`) of each gas within each injection.
+- Measurements are considered part of the same injection when the gap between consecutive measurements with the same `MPVPosition` does not exceed 100 s (parameter configurable at the beginning of `main.py`).
+- The first 10 min of each injection are discarded (parameter configurable at the beginning of `main.py`). Only observations with `processing_flag_*=1` are used, and at least 100 observations per gas are required; otherwise, the mean and standard deviation are left empty.
+- The CO2, CH4, and CO results are grouped into one row per injection. The result is saved in `processed_data/injections`.
 
-### Paso 4. Cálculo de calibraciones
+### Step 4. Calibration calculation
 
-- Lectura del histórico completo de inyecciones target ya procesadas (`processed_data/injections`).
-- Emparejamiento de las inyecciones consecutivas con `MPVPosition=2` y `MPVPosition=3`.
-- Si se repite una posición de target (`MPVPosition=2` o `MPVPosition=3`) antes de aparecer la otra, se conserva la inyección más reciente.
-- Ajuste lineal para las tres especies, usando los valores de referencia de los targets (parámetros configurables al inicio de `main.py`) y la media de las inyecciones. Si falta alguna media para algún gas, se descarta la calibración de ese gas.
-- En `processed_data/calibrations` se guardan ficheros con los parámetros de la calibración y otros parámetros útiles, como la fecha a partir de la cual la calibración es válida (= el final de la segunda inyección de target correspondiente).
-- En `processed_data/calibration_curves` se guarda una gráfica PNG con los dos puntos de cada gas y el ajuste lineal.
+- Reading of the complete history of already processed target injections (`processed_data/injections`).
+- Pairing of consecutive injections with `MPVPosition=2` and `MPVPosition=3`.
+- If a target position (`MPVPosition=2` or `MPVPosition=3`) is repeated before the other one appears, the most recent injection is retained.
+- Linear fitting for the three species, using the target reference values (parameters configurable at the beginning of `main.py`) and the injection means. If any mean is missing for a given gas, the calibration for that gas is discarded.
+- Files containing the calibration parameters and other useful parameters are saved in `processed_data/calibrations`, including the date from which the calibration is valid (= the end of the corresponding second target injection).
+- A PNG plot with the two points for each gas and the linear fit is saved in `processed_data/calibration_curves`.
 
-### Paso 5. Calibración del ambiente
+### Step 5. Ambient calibration
 
-- Lectura de todo el histórico de calibraciones lineales disponible.
-- Selección, para cada medida y gas, de la calibración más reciente cuya fecha sea anterior o igual a la medida.
-- Cálculo de las concentraciones corregidas mediante la transformación dada por el ajuste lineal. En este paso se registra la calibración utilizada para cada observación. Si el `processing_flag_*` es 0 o no existe una calibración anterior, la concentración corregida queda vacía.
-- No se interpola entre la calibración anterior y la posterior ni se limita la antigüedad máxima de la calibración (es un procesado sencillo... y tenemos calibraciones diarias).
-- Guardado de los datos procesados en `processed_data/ambient`, incluyendo el valor antes de corregir, el valor corregido y la fecha de la calibración empleada.
+- Reading of the full available history of linear calibrations.
+- For each measurement and gas, selection of the most recent calibration whose date is earlier than or equal to the measurement date.
+- Calculation of the corrected concentrations using the transformation given by the linear fit. The calibration used for each observation is recorded at this stage. If `processing_flag_*` is 0 or no earlier calibration exists, the corrected concentration is left empty.
+- No interpolation is performed between the previous and subsequent calibrations, and no maximum calibration age is imposed (this is a simple processing workflow... and we have daily calibrations).
+- The processed data are saved in `processed_data/ambient`, including the value before correction, the corrected value, and the date of the calibration used.
 
-### Paso 6. Limpieza de datos temporales
+### Step 6. Temporary data cleanup
 
-- Si todas las etapas de procesado terminan correctamente, se eliminan los datos raw y preprocesados situados fuera del periodo configurado (por defecto: 80 días).
-- Así se evita acumular demasiados ficheros temporales que llenen el disco duro. Solo se conservan indefinidamente los datos que hay en `processed_data` (promedios de inyecciones, datos de ambiente procesados, calibraciones).
+- If all processing stages finish successfully, raw and preprocessed data outside the configured period (80 days by default) are deleted.
+- This prevents the accumulation of too many temporary files that could fill the hard drive. Only the data in `processed_data` are retained indefinitely (injection averages, processed ambient data, and calibrations).
 
-> **Nota:** Si se desea recalcular los datos procesados de un día, primero hay que borrar el subdirectorio correspondiente y volver a ejecutar el código.
+> **Note:** To recalculate the processed data for a given day, first delete the corresponding subdirectory and run the code again.
