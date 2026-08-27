@@ -22,8 +22,8 @@ The workflow runs incrementally and is organized into the following stages. Exis
 
 ### Step 1. Raw data copy
 
-- Daily copy of the raw data from the QNAP (`Z:\picarro-aux\DataLog_User`) to `tmp/raw_data`. Days already present in `tmp/raw_data` are not overwritten.
-- The latest 80 complete days up to yesterday are copied (parameter configurable at the beginning of `main.py`). These are the days that will be processed (without overwriting those already processed), while older raw data are progressively deleted (see Step 6 for more details).
+- Daily copy of the raw data from the raw data storage system (`Z:\picarro-aux\DataLog_User`) to `tmp/raw_data`. Days already present in `tmp/raw_data` are not overwritten.
+- The latest 80 complete days up to yesterday are copied (parameter configurable at the beginning of `main.py`). These are the days that will be processed (without overwriting those already processed), while older raw data are progressively deleted (see Step 6 for more details). The copy process does not overwrite the data, so if the script is set up to automatically run once per day it will only copy the raw data from yesterday (normal working workflow)
 
 ### Step 2. Preprocessing of ambient and target data
 
@@ -54,12 +54,11 @@ The workflow runs incrementally and is organized into the following stages. Exis
 - Reading of the full available history of linear calibrations.
 - For each measurement and gas, selection of the most recent calibration whose date is earlier than or equal to the measurement date.
 - Calculation of the corrected concentrations using the transformation given by the linear fit. The calibration used for each observation is recorded at this stage. If `processing_flag_*` is 0 or no earlier calibration exists, the corrected concentration is left empty.
-- No interpolation is performed between the previous and subsequent calibrations, and no maximum calibration age is imposed (this is a simple processing workflow... and we have daily calibrations).
+- No temporal interpolation is performed between the previous and subsequent calibrations, and no maximum calibration age is imposed (this is a simple processing workflow... and we have daily calibrations).
 - The processed data are saved in `processed_data/ambient`, including the value before correction, the corrected value, and the date of the calibration used.
 
 ### Step 6. Temporary data cleanup
 
-- If all processing stages finish successfully, raw and preprocessed data outside the configured period (80 days by default) are deleted.
-- This prevents the accumulation of too many temporary files that could fill the hard drive. Only the data in `processed_data` are retained indefinitely (injection averages, processed ambient data, and calibrations).
+- If all processing stages finish successfully, raw and preprocessed data outside the configured period (80 days by default) are deleted. This prevents the accumulation of too many temporary files that could fill the hard drive. Only the data in `processed_data` are retained indefinitely (injection averages, processed ambient data, and calibrations).
 
 > **Note:** To recalculate the processed data for a given day, first delete the corresponding subdirectory and run the code again.
