@@ -8,7 +8,7 @@ Comparison with the more elaborate workflow used for the Picarro instrument oper
 
 This workflow is shared to support the scientific community and may be useful as a reference or starting point for similar Picarro data-processing applications.
 
-The comments, variable names and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
+The comments, variable names, and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
 
 ## License
 
@@ -23,7 +23,7 @@ The workflow runs incrementally and is organized into the following stages. Exis
 ### Step 1. Raw data copy
 
 - Daily copy of the raw data from the raw data storage system (`Z:\picarro-aux\DataLog_User`) to `tmp/raw_data`. Days already present in `tmp/raw_data` are not overwritten.
-- The latest 80 complete days up to yesterday are copied (parameter configurable at the beginning of `main.py`). These are the days that will be processed (without overwriting those already processed), while older raw data are progressively deleted (see Step 6 for more details). The copy process does not overwrite the data, so if the script is set up to automatically run once per day it will only copy the raw data from yesterday (normal working workflow)
+- The latest 80 complete days up to yesterday are copied (parameter configurable at the beginning of `main.py`). These are the days that will be processed (without overwriting those already processed), while older raw data are progressively deleted (see Step 6 for more details). Because existing days are not overwritten, a daily scheduled run will normally copy only the previous day's raw data. If the workflow has not run for several days, it will also copy any missing days within the configured processing period.
 
 ### Step 2. Preprocessing of ambient and target data
 
@@ -46,7 +46,7 @@ The workflow runs incrementally and is organized into the following stages. Exis
 - Pairing of consecutive injections with `MPVPosition=2` and `MPVPosition=3`.
 - If a target position (`MPVPosition=2` or `MPVPosition=3`) is repeated before the other one appears, the most recent injection is retained.
 - Linear fitting for the three species, using the target reference values (parameters configurable at the beginning of `main.py`) and the injection means. If any mean is missing for a given gas, the calibration for that gas is discarded.
-- Files containing the calibration parameters and other useful parameters are saved in `processed_data/calibrations`, including the date from which the calibration is valid (= the end of the corresponding second target injection).
+- Files containing the calibration parameters and other useful parameters are saved in `processed_data/calibrations`, including the date from which the calibration is valid (i.e., the end of the corresponding second target injection).
 - A PNG plot with the two points for each gas and the linear fit is saved in `processed_data/calibration_curves`.
 
 ### Step 5. Ambient calibration
