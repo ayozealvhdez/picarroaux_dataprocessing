@@ -8,6 +8,12 @@ Comparison with the more elaborate workflow used for the Picarro instrument oper
 
 The explanations, comments, documentation, variable names and file names are in Spanish because this script is primarily intended for internal use by the Izaña team.
 
+## License
+
+This project is released under the [Academic Non-Commercial License](LICENSE). It may be used, copied, and modified for non-commercial academic research, teaching, and scientific work. Commercial use requires prior written permission from the copyright holder. Input observational data are not distributed under this license.
+
+> **Note:** This workflow includes installation-specific configuration, such as data paths, instrument settings, target reference values, and processing parameters. Adapt these settings to your local setup before use.
+
 ## PASO 1. COPIA DE DATOS RAW
 
 - Copia diaria de los datos raw desde la QNAP (`Z:\picarro-aux\DataLog_User`) hacia `tmp/raw_data`. Los días ya existentes en `tmp/raw_data` no se sobrescriben.
