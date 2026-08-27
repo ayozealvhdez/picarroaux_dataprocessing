@@ -1,6 +1,6 @@
 # Python workflow for processing data from the backup Picarro analyser at Izaña Observatory
 
-This analyser is a third instrument, operating independently of the Picarro systems used for GAW and ICOS. The processing workflow implemented here is simpler than those used for the other two Picarro instruments operated by the [Izaña Atmospheric Research Center](https://izana.aemet.es/). This instrument, internally known as the “Picarro aux” or “Picarro backup”, is used solely as a comparison instrument.
+Developed by the [Izaña Atmospheric Research Center](https://izana.aemet.es/), this workflow supports the backup Picarro analyser, internally known as the “Picarro aux” or “Picarro backup”. The analyser is a third instrument, operating independently of the Picarro systems used for GAW and ICOS, and is employed solely as a comparison instrument. Its processing workflow is therefore simpler than those used for the other two analysers.
 
 The workflow is designed for the ambient/target sampling sequence of the Picarro aux. It uses only two target tanks, each sampled for 30 minutes once per day; these measurements are used to derive a daily calibration curve.
 
