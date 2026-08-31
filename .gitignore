@@ -12,6 +12,7 @@ procesado_diario.log
 comparison_with_pedro.png
 comparison_with_pedro.py
 datos_pedro/
+data_path/
 
 # Local IDE configuration
 .idea/

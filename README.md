@@ -19,7 +19,7 @@ The comments, variable names, and file names are in Spanish because this script 
 
 This project is released under an [Academic Non-Commercial License](LICENSE). The repository may be used, copied, and modified for non-commercial academic research, teaching, and scientific work. Commercial use requires prior written permission from the copyright holder. Input observational data are not distributed under this license.
 
-> **Note:** This workflow includes installation-specific configuration, such as data paths, instrument settings, target reference values, and processing parameters. Adapt these settings to your local setup before use.
+> **Note:** This workflow includes installation-specific configuration, such as data paths, instrument settings, target reference values, and processing parameters. Adapt these settings to your local setup before use. In particular, create the Git-ignored file `data_path/directorio_origen.txt` containing the absolute local or UNC path to the raw-data directory.
 
 ## Processing workflow
 
@@ -27,7 +27,7 @@ The workflow runs incrementally and is organized into the following stages. Exis
 
 ### Step 1. Raw data copy
 
-- Daily copy of the raw data from the raw data storage system (`Z:\picarro-aux\DataLog_User`) to `tmp/raw_data`. Days already present in `tmp/raw_data` are not overwritten.
+- Daily copy of the raw data from the directory configured in `data_path/directorio_origen.txt` to `tmp/raw_data`. This local configuration file is Git-ignored and must contain the absolute local or UNC path to the raw-data directory. Days already present in `tmp/raw_data` are not overwritten.
 - The latest 80 complete days up to yesterday are copied (parameter configurable at the beginning of `main.py`). These are the days that will be processed (without overwriting those already processed), while older raw data are progressively deleted (see Step 6 for more details). Because existing days are not overwritten, a daily scheduled run will normally copy only the previous day's raw data. If the workflow has not run for several days, it will also copy any missing days within the configured processing period.
 
 ### Step 2. Preprocessing of ambient and target data

@@ -75,7 +75,11 @@ SEGUNDOS_MAXIMOS_ENTRE_MEDIDAS_TARGET = 100
 MINIMO_OBSERVACIONES_INYECCION = 100
 
 DIRECTORIO_PROYECTO = os.path.dirname(os.path.abspath(__file__))
-DIRECTORIO_ORIGEN = r"Z:\picarro-aux\DataLog_User"
+RUTA_DIRECTORIO_ORIGEN = os.path.join(
+    DIRECTORIO_PROYECTO,
+    "data_path",
+    "directorio_origen.txt",
+)
 DIRECTORIO_RAW = os.path.join(DIRECTORIO_PROYECTO, "tmp", "raw_data")
 DIRECTORIO_PREPROCESADO = os.path.join(
     DIRECTORIO_PROYECTO,
@@ -103,6 +107,26 @@ DIRECTORIO_AMBIENTE_PROCESADO = os.path.join(
 SEPARADOR = "-------------------------------------------------------"
 
 
+def leer_directorio_origen():
+    """Lee la ruta local del origen de datos, fuera del repositorio."""
+    try:
+        with open(RUTA_DIRECTORIO_ORIGEN, "r", encoding="utf-8") as archivo:
+            directorio_origen = archivo.read().strip()
+    except OSError as error:
+        raise RuntimeError(
+            "No se pudo leer la configuración local del origen: "
+            f"{RUTA_DIRECTORIO_ORIGEN}"
+        ) from error
+
+    if not directorio_origen:
+        raise RuntimeError(
+            "La configuración local del origen está vacía: "
+            f"{RUTA_DIRECTORIO_ORIGEN}"
+        )
+
+    return directorio_origen
+
+
 # ==========================================================
 # 2. EJECUCIÓN DEL FLUJO
 # ==========================================================
@@ -116,6 +140,7 @@ if __name__ == "__main__":
 
     try:
         print("Paso 0: Leyendo la configuración común...")
+        DIRECTORIO_ORIGEN = leer_directorio_origen()
         dias = obtener_parametros_ejecucion(DIAS_PROCESADO)
         print(SEPARADOR)
 
