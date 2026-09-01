@@ -484,7 +484,6 @@ def representar_gas_calibracion(
             va="center",
             transform=eje.transAxes,
         )
-        eje.set_title(gas)
         eje.set_axis_off()
         return False
 
@@ -500,7 +499,12 @@ def representar_gas_calibracion(
     eje_x = np.linspace(minimo - margen, maximo + margen, 100)
     eje_y = pendiente * eje_x + ordenada_salida
 
-    eje.plot(eje_x, eje_y, color="tab:blue", label="Ajuste lineal")
+    eje.plot(
+        eje_x,
+        eje_y,
+        color="tab:blue",
+        label=f"Ajuste lineal de {gas}",
+    )
     for indice in range(len(mediciones)):
         eje.scatter(
             mediciones[indice],
@@ -510,12 +514,26 @@ def representar_gas_calibracion(
             zorder=3,
         )
 
-    eje.set_title(
-        f"{gas}\ny = {pendiente:.8g} x + {ordenada_salida:.8g}"
-    )
     eje.set_xlabel(f"Media de la inyección ({unidad})")
     eje.set_ylabel(f"Valor de referencia ({unidad})")
-    eje.grid(alpha=0.25)
+    eje.minorticks_on()
+    eje.tick_params(
+        axis="both",
+        which="major",
+        direction="in",
+        top=True,
+        right=True,
+        labelsize=13,
+        length=5,
+    )
+    eje.tick_params(
+        axis="both",
+        which="minor",
+        direction="in",
+        top=True,
+        right=True,
+        length=2.5,
+    )
     eje.legend(fontsize=8)
     return True
 
@@ -525,6 +543,9 @@ def guardar_grafica_calibracion(
         cabecera,
         directorio_curvas,
         gases,
+        ancho_por_gas,
+        alto_grafica,
+        dpi_grafica,
 ):
     """
     Guarda un PNG con una subgráfica por gas para una pareja de inyecciones.
@@ -561,7 +582,7 @@ def guardar_grafica_calibracion(
         figura, matriz_ejes = plt.subplots(
             1,
             len(gases),
-            figsize=(5.2 * len(gases), 4.7),
+            figsize=(ancho_por_gas * len(gases), alto_grafica),
             squeeze=False,
         )
         ejes = matriz_ejes[0]
@@ -574,12 +595,8 @@ def guardar_grafica_calibracion(
                 gas,
             )
 
-        figura.suptitle(
-            f"Calibración disponible desde "
-            f"{fecha.isoformat(timespec='milliseconds').replace('+00:00', 'Z')}"
-        )
-        figura.tight_layout(rect=(0.0, 0.0, 1.0, 0.93))
-        figura.savefig(ruta_temporal, dpi=160, bbox_inches="tight")
+        figura.tight_layout()
+        figura.savefig(ruta_temporal, dpi=dpi_grafica)
         plt.close(figura)
         figura = None
 
@@ -601,6 +618,9 @@ def generar_graficas_calibraciones(
         ruta_calibraciones,
         directorio_curvas,
         gases,
+        ancho_por_gas,
+        alto_grafica,
+        dpi_grafica,
 ):
     """
     Genera todas las gráficas todavía ausentes de un archivo diario.
@@ -618,6 +638,9 @@ def generar_graficas_calibraciones(
                 cabecera,
                 directorio_curvas,
                 gases,
+                ancho_por_gas,
+                alto_grafica,
+                dpi_grafica,
         ):
             resultado_correcto = False
 
@@ -633,6 +656,9 @@ def calcular_calibraciones_periodo(
         posiciones_target,
         gases,
         referencias_tanques,
+        ancho_grafica_por_gas,
+        alto_grafica_calibracion,
+        dpi_grafica_calibracion,
 ):
     """
     Ajusta y publica las calibraciones de todas las parejas del periodo.
@@ -706,6 +732,9 @@ def calcular_calibraciones_periodo(
                 ruta_salida,
                 directorio_curvas,
                 gases,
+                ancho_grafica_por_gas,
+                alto_grafica_calibracion,
+                dpi_grafica_calibracion,
         ):
             resultado_correcto = False
 

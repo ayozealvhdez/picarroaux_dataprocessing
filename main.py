@@ -32,12 +32,16 @@ from funciones.periodo import calcular_periodo, obtener_parametros_ejecucion
 from funciones.preprocesado import preprocesar_periodo
 
 
-# ==========================================================
-# 1. CONFIGURACIÓN COMÚN DEL FLUJO
-# ==========================================================
+#-------------------------------------------------------
+#----------------- RUN CONFIGURATION -------------------
+#-------------------------------------------------------
 
 # Días completos que se copian y procesan hasta ayer.
 DIAS_PROCESADO = 80
+
+#-------------------------------------------------------
+#------------- PROCESSING CONFIGURATION ----------------
+#-------------------------------------------------------
 
 # Gases que se extraen directamente de las columnas raw y se procesan.
 GASES = ("CO2", "CH4", "CO")
@@ -45,6 +49,10 @@ GASES = ("CO2", "CH4", "CO")
 POSICION_AMBIENTE = 1
 # Posiciones MPV de los dos tanques que forman cada calibración lineal.
 POSICIONES_TARGET = (2, 3)
+
+#-------------------------------------------------------
+#----------- CALIBRATION CONFIGURATION -----------------
+#-------------------------------------------------------
 
 # Valores de referencia de los tanques.
 REFERENCIA_MPV03_CO2_PPM = 434.79
@@ -73,6 +81,16 @@ MINUTOS_ESTABILIZACION_TARGET = 10
 SEGUNDOS_MAXIMOS_ENTRE_MEDIDAS_TARGET = 100
 # Número mínimo de medidas estables válidas para aceptar una inyección.
 MINIMO_OBSERVACIONES_INYECCION = 100
+
+# Ajustes visuales de las curvas de calibración.
+ANCHO_GRAFICA_CALIBRACION_POR_GAS = 5.2
+ALTO_GRAFICA_CALIBRACION = 4.7
+DPI_GRAFICA_CALIBRACION = 300
+
+
+#-------------------------------------------------------
+#---------------- DIRECTORY CONFIGURATION ---------------
+#-------------------------------------------------------
 
 DIRECTORIO_PROYECTO = os.path.dirname(os.path.abspath(__file__))
 RUTA_DIRECTORIO_ORIGEN = os.path.join(
@@ -127,9 +145,9 @@ def leer_directorio_origen():
     return directorio_origen
 
 
-# ==========================================================
-# 2. EJECUCIÓN DEL FLUJO
-# ==========================================================
+#-------------------------------------------------------
+#-------------------- MAIN WORKFLOW --------------------
+#-------------------------------------------------------
 
 if __name__ == "__main__":
     copia_correcta = False
@@ -198,6 +216,9 @@ if __name__ == "__main__":
             POSICIONES_TARGET,
             GASES,
             REFERENCIAS_TANQUES,
+            ANCHO_GRAFICA_CALIBRACION_POR_GAS,
+            ALTO_GRAFICA_CALIBRACION,
+            DPI_GRAFICA_CALIBRACION,
         )
         print(SEPARADOR)
 
