@@ -4,11 +4,23 @@ This workflow supports the backup Picarro G2401 analyser at the [Izaña Observat
 
 The workflow is designed for the ambient/target sampling sequence of the Picarro aux. It uses only two target tanks, each sampled for 30 minutes once per day, and their measurements are used to derive a daily calibration curve. Although they therefore function as calibration tanks, we refer to them as targets because they are sampled according to a schedule very similar to that used for target tanks on other instruments at Izaña.
 
+The workflow reads the raw analyser-data location from a local configuration file, copies and preprocesses the daily files, derives calibrations from the target measurements, and returns calibrated ambient-air data together with injection, calibration, and calibration-curve outputs.
+
 Comparison with the more elaborate workflow used for the Picarro instrument operated for GAW at Izaña shows that the mean and median differences in CO2, CH4, and CO concentrations are on the order of 0.001–0.01 ppm for CO2 and 0.001–0.01 ppb for CH4 and CO. This is therefore a simple, useful, and functional solution that fully meets our needs.
 
 The code is public to support the scientific community, since it may be useful as a reference or starting point for similar Picarro data-processing applications.
 
 The comments, variable names, and file names are in Spanish because this script was primarily conceived for internal use by the Izaña team.
+
+## Repository structure
+
+```
+main.py              Main incremental processing workflow.
+funciones/           Reusable functions for copying, preprocessing, injections, calibration, and correction.
+data_path/           Local input configuration; contains the raw-data source path.
+tmp/                 Automatically generated temporary raw and preprocessed data.
+processed_data/      Automatically generated persistent outputs.
+```
 
 ## Requirements
 
