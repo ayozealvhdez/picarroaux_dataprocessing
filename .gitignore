@@ -4,15 +4,36 @@ __pycache__/
 *.py[cod]
 
 # Generated temporary and processed data
-tmp/
-processed_data/
+tmp/*
+!tmp/README.md
+!tmp/raw_data/
+tmp/raw_data/*
+!tmp/raw_data/README.md
+!tmp/preprocessed_data/
+tmp/preprocessed_data/*
+!tmp/preprocessed_data/README.md
+processed_data/*
+!processed_data/README.md
+!processed_data/ambient/
+processed_data/ambient/*
+!processed_data/ambient/README.md
+!processed_data/calibrations/
+processed_data/calibrations/*
+!processed_data/calibrations/README.md
+!processed_data/calibration_curves/
+processed_data/calibration_curves/*
+!processed_data/calibration_curves/README.md
+!processed_data/injections/
+processed_data/injections/*
+!processed_data/injections/README.md
 procesado_diario.log
 
 # Local comparison scripts and data
 comparison_with_pedro.png
 comparison_with_pedro.py
 datos_pedro/
-data_path/
+data_path/*
+!data_path/README.md
 local_tools/
 
 # Local IDE configuration
