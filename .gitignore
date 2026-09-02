@@ -13,6 +13,7 @@ comparison_with_pedro.png
 comparison_with_pedro.py
 datos_pedro/
 data_path/
+local_tools/
 
 # Local IDE configuration
 .idea/
